@@ -68,3 +68,10 @@ mean(june_polls$lower <= 0 & june_polls$upper >= 0)
 #What proportion of polls have a confidence interval covering the true value of 𝑑 ?
 mean(june_polls$hit)
 
+
+#Group and summarize the june_polls object by pollster to find the proportion 
+#of hits for each pollster and the number of polls per pollster. 
+#Use arrange() to sort by hit rate.
+june_polls %>% group_by(pollster) %>% summarize(hits = n())
+
+
