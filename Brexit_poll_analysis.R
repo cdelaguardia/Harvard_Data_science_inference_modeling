@@ -52,3 +52,19 @@ N <- brexit_poll_hat$samplesize[1]
 stand_error_x_hat <- sqrt(brexit_poll_hat$x_hat[1]*(1 - brexit_poll_hat$x_hat[1])/N)
 conf_interval_x_hat <- c(brexit_poll_hat$x_hat[1] - qnorm(0.975)*stand_error_x_hat, brexit_poll_hat$x_hat[1] + qnorm(0.975)*stand_error_x_hat)
 
+#How many polls are in june_polls?
+june_polls <- brexit_poll_hat %>% filter(enddate >= '2016-06-01')
+length(june_polls$enddate)
+
+#What proportion of polls have a confidence interval that covers the value 0?
+d <- -0.038
+june_polls <- june_polls %>% mutate(se_x_hat = sqrt(x_hat*(1 - x_hat)/samplesize),
+  se_spread = 2*se_x_hat,
+  lower = spread - se_spread*qnorm(0.975),
+  upper = spread + se_spread*qnorm(0.975),
+  hit = (lower < d & upper > d))
+mean(june_polls$lower <= 0 & june_polls$upper >= 0)
+
+#What proportion of polls have a confidence interval covering the true value of 𝑑 ?
+mean(june_polls$hit)
+
